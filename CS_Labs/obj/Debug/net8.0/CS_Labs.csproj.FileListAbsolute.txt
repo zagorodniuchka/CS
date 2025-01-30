@@ -1,0 +1,15 @@
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/bin/Debug/net8.0/CS_Labs
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/bin/Debug/net8.0/CS_Labs.deps.json
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/bin/Debug/net8.0/CS_Labs.runtimeconfig.json
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/bin/Debug/net8.0/CS_Labs.dll
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/bin/Debug/net8.0/CS_Labs.pdb
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.GeneratedMSBuildEditorConfig.editorconfig
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.AssemblyInfoInputs.cache
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.AssemblyInfo.cs
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.csproj.CoreCompileInputs.cache
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.sourcelink.json
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.dll
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/refint/CS_Labs.dll
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.pdb
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/CS_Labs.genruntimeconfig.cache
+/Users/anastasiazagorodnyuk/Desktop/uni/CS_Labs/CS_Labs/obj/Debug/net8.0/ref/CS_Labs.dll
