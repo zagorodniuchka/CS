@@ -1,4 +1,5 @@
 ﻿using System;
+using CS_Labs.Lab2;
 
 class Program
 {
@@ -15,8 +16,8 @@ class Program
             case "lab1 t2":
                 Lab1Task2.Run();
                 break;
-            case "lab 2":
-                Lab1Task1.Run();
+            case "lab2":
+                Lab2.Run();
                 break;
             default:
                 Console.WriteLine("Invalid lab/task selection.");
