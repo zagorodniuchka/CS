@@ -1,6 +1,7 @@
 ﻿using System;
 using CS_Labs.Lab2;
 using CS_Labs.Lab3;
+using CS_Labs.Lab4;
 
 class Program
 {
@@ -22,6 +23,9 @@ class Program
                 break;
             case "lab3":
                 PlayfairCipher.Run();
+                break;
+            case "lab4":
+                DESAlgorithm.Run();
                 break;
             default:
                 Console.WriteLine("Invalid lab/task selection.");
