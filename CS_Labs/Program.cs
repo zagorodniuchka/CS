@@ -1,5 +1,6 @@
 ﻿using System;
 using CS_Labs.Lab2;
+using CS_Labs.Lab3;
 
 class Program
 {
@@ -18,6 +19,9 @@ class Program
                 break;
             case "lab2":
                 Lab2.Run();
+                break;
+            case "lab3":
+                PlayfairCipher.Run();
                 break;
             default:
                 Console.WriteLine("Invalid lab/task selection.");
