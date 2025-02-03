@@ -1,6 +1,5 @@
 ﻿using System;
 using CS_Labs.Lab2;
-using CS_Labs.Lab3;
 using CS_Labs.Lab4;
 
 class Program

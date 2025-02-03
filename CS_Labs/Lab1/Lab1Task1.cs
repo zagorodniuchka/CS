@@ -56,7 +56,7 @@ class Lab1Task1
         foreach (char c in message)
         {
             int originalPos = FindPosition(alphabet, c);
-            int newPos = (originalPos + key) % 26; // Caesar shift
+            int newPos = (originalPos + key) % 26; // Caesar shift - остаток деления на 26
             result += alphabet[newPos];
         }
 

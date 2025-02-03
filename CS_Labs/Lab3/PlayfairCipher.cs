@@ -1,160 +1,126 @@
-namespace CS_Labs.Lab3;
 using System;
-using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 class PlayfairCipher
 {
-    private static string alphabet = "АБВГҐДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЭЮЯ";
-    private static string[,] table = new string[5, 5];
+    private const string Alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+    private char[,] matrix;
 
-    // Метод для удаления пробелов и перевода в верхний регистр
-    private static string CleanInput(string input)
+    public PlayfairCipher(string key)
     {
-        StringBuilder cleaned = new StringBuilder();
-        foreach (char c in input.ToUpper())
-        {
-            if (alphabet.Contains(c.ToString()))
-            {
-                cleaned.Append(c);
-            }
-        }
-        return cleaned.ToString();
+        if (key.Length < 7) throw new ArgumentException("Ключ должен содержать не менее 7 символов.");
+        matrix = GenerateMatrix(key);
     }
 
-    // Метод для построения таблицы Плейфера из ключа
-    private static void CreateTable(string key)
+    private char[,] GenerateMatrix(string key)
     {
-        bool[] used = new bool[alphabet.Length];
+        string fullKey = new string((key.ToUpper() + Alphabet).Distinct().ToArray());
+        char[,] mat = new char[4, 8]; // Матрица 4 строки, 8 столбцов
         int index = 0;
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 8; j++)
+                if (index < fullKey.Length)
+                    mat[i, j] = fullKey[index++];
+        return mat;
+    }
 
-        // Добавляем ключ в таблицу
-        foreach (char c in CleanInput(key))
+    public void PrintMatrix()
+    {
+        Console.WriteLine("Матрица шифра Плейфера:");
+        for (int i = 0; i < 4; i++)
         {
-            if (!used[alphabet.IndexOf(c)])
+            for (int j = 0; j < 8; j++)
             {
-                table[index / 5, index % 5] = c.ToString();
-                used[alphabet.IndexOf(c)] = true;
-                index++;
+                Console.Write(matrix[i, j] + " ");
             }
-        }
-
-        // Добавляем оставшиеся буквы алфавита
-        for (int i = 0; i < alphabet.Length; i++)
-        {
-            if (!used[i])
-            {
-                table[index / 5, index % 5] = alphabet[i].ToString();
-                index++;
-            }
+            Console.WriteLine();
         }
     }
 
-    // Метод для поиска пары символов в таблице
-    private static (int, int) FindPosition(char c)
+    private (int, int) FindPosition(char c)
     {
-        for (int row = 0; row < 5; row++)
-        {
-            for (int col = 0; col < 5; col++)
-            {
-                if (table[row, col] == c.ToString())
-                {
-                    return (row, col);
-                }
-            }
-        }
-        return (-1, -1);
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 8; j++)
+                if (matrix[i, j] == c) return (i, j);
+        throw new Exception("Символ не найден в матрице.");
     }
 
-    // Метод для шифрования или дешифрования пары символов
-    private static string ProcessPair(char first, char second, bool encrypt)
+    private string PrepareText(string text)
     {
-        var (row1, col1) = FindPosition(first);
-        var (row2, col2) = FindPosition(second);
+        text = text.ToUpper().Replace("Ё", "Е");
+        List<char> formatted = new List<char>();
 
-        if (row1 == row2)  // Одни и те же строки
+        // Пропускаем пробелы и проверяем, что только буквы русского алфавита
+        for (int i = 0; i < text.Length; i++)
         {
-            col1 = (col1 + (encrypt ? 1 : -1) + 5) % 5;
-            col2 = (col2 + (encrypt ? 1 : -1) + 5) % 5;
-        }
-        else if (col1 == col2)  // Один и тот же столбец
-        {
-            row1 = (row1 + (encrypt ? 1 : -1) + 5) % 5;
-            row2 = (row2 + (encrypt ? 1 : -1) + 5) % 5;
-        }
-        else  // Прямоугольник
-        {
-            int temp = col1;
-            col1 = col2;
-            col2 = temp;
+            if (text[i] == ' ') continue;  // Игнорируем пробелы
+            if (!Alphabet.Contains(text[i]))
+                throw new ArgumentException("Допустимы только буквы русского алфавита.");
+
+            formatted.Add(text[i]);
+
+            // Если подряд два одинаковых символа, вставляем 'Х'
+            if (i < text.Length - 1 && text[i] == text[i + 1])
+                formatted.Add('Х');
         }
 
-        return table[row1, col1] + table[row2, col2];
+        // Если длина текста нечетная, добавляем 'Х'
+        if (formatted.Count % 2 != 0) formatted.Add('Х');
+
+        return new string(formatted.ToArray());
     }
 
-    // Метод для шифрования сообщения
-    public static string Encrypt(string message)
+    private string Process(string text, int shift)
     {
-        StringBuilder encrypted = new StringBuilder();
-        message = CleanInput(message);
+        text = PrepareText(text); // Подготовка текста
+        string result = "";
+    
+        // Перебираем текст по парам
+        for (int i = 0; i < text.Length; i += 2)
+        {
+            var (x1, y1) = FindPosition(text[i]);  // Находим позицию первого символа
+            var (x2, y2) = FindPosition(text[i + 1]);  // Находим позицию второго символа
         
-        if (message.Length % 2 != 0)
-        {
-            message += "X";  // Если нечётное количество символов, добавляем "X"
+            if (x1 == x2) // Если символы в одной строке
+            {
+                result += matrix[x1, (y1 + shift + 8) % 8];
+                result += matrix[x2, (y2 + shift + 8) % 8];
+            }
+            else if (y1 == y2) // Если символы в одном столбце
+            {
+                result += matrix[(x1 + shift + 4) % 4, y1];
+                result += matrix[(x2 + shift + 4) % 4, y2];
+            }
+            else // Если символы образуют прямоугольник
+            {
+                result += matrix[x1, y2];
+                result += matrix[x2, y1];
+            }
         }
-
-        for (int i = 0; i < message.Length; i += 2)
-        {
-            encrypted.Append(ProcessPair(message[i], message[i + 1], true));
-        }
-
-        return encrypted.ToString();
+        return result;
     }
 
-    // Метод для дешифрования
-    public static string Decrypt(string message)
+    public string Encrypt(string plaintext) => Process(plaintext, 1);
+    public string Decrypt(string ciphertext) => Process(ciphertext, -1);
+public static void Run()
     {
-        StringBuilder decrypted = new StringBuilder();
-        message = CleanInput(message);
+        Console.Write("Введите ключ (не менее 7 символов): ");
+        string key = Console.ReadLine().ToUpper();
 
-        for (int i = 0; i < message.Length; i += 2)
+        PlayfairCipher cipher = new PlayfairCipher(key);
+        cipher.PrintMatrix();
+        
+        int choice;
+        do
         {
-            decrypted.Append(ProcessPair(message[i], message[i + 1], false));
-        }
+            Console.Write("Выберите операцию (1 - шифрование, 2 - дешифрование): ");
+        } while (!int.TryParse(Console.ReadLine(), out choice) || (choice != 1 && choice != 2));
 
-        return decrypted.ToString();
-    }
+        Console.Write("Введите текст: ");
+        string input = Console.ReadLine().ToUpper();
 
-    public static void Run()
-    {
-        Console.WriteLine("Введите ключ (не менее 7 символов): ");
-        string key = Console.ReadLine();
-        if (key.Length < 7)
-        {
-            Console.WriteLine("Ключ должен быть не менее 7 символов.");
-            return;
-        }
-
-        CreateTable(key);
-
-        Console.WriteLine("Выберите операцию:\n1. Шифрование\n2. Дешифрование");
-        string operation = Console.ReadLine();
-
-        Console.WriteLine("Введите сообщение или криптограмму: ");
-        string message = Console.ReadLine();
-
-        if (operation == "1")
-        {
-            string encryptedMessage = Encrypt(message);
-            Console.WriteLine("Зашифрованное сообщение: " + encryptedMessage);
-        }
-        else if (operation == "2")
-        {
-            string decryptedMessage = Decrypt(message);
-            Console.WriteLine("Расшифрованное сообщение: " + decryptedMessage);
-        }
-        else
-        {
-            Console.WriteLine("Некорректный выбор операции.");
-        }
+        string output = choice == 1 ? cipher.Encrypt(input) : cipher.Decrypt(input);
+        Console.WriteLine($"Результат: {output}");
     }
 }
